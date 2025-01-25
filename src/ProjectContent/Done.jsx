@@ -1,33 +1,24 @@
 import React, { useState } from 'react';
 
-export default function Done({doneTasks, onEdit, onDelete }) {
-    const [sortOrder, setSortOrder] = useState(''); 
-        // Toggle sorting order between 'oldestToNewest' and 'newestToOldest'
-        const handleSort = () => {
-            if (sortOrder === 'oldestToNewest') {
-                setSortOrder('newestToOldest');
-            } else {
-                setSortOrder('oldestToNewest');
-            }
-        };
-        const sortedDoneTasks = [...doneTasks].sort((a, b) => {
-            const dateA = new Date(a.dueDate);
-            const dateB = new Date(b.dueDate);
-    
-            if (sortOrder === 'oldestToNewest') {
-                return dateA - dateB; // Sort from oldest to newest
-            } else if (sortOrder === 'newestToOldest') {
-                return dateB - dateA; // Sort from newest to oldest
-            }
-            return 0; // No sorting if no order is selected
-        });
+export default function Done({ doneTasks, onEdit, onDelete, onSort }) {
+    const [sortOrder, setSortOrder] = useState('newestToOldest'); // Local state for sorting
+
+    const handleSortToggle = () => {
+        const newOrder = sortOrder === 'newestToOldest' ? 'oldestToNewest' : 'newestToOldest';
+        setSortOrder(newOrder); // Update local state
+        onSort(newOrder); // Trigger parent sorting
+    };
     return (
         <>
             <div className="mb-4 w-full px-2 sm:w-1/2 md:w-1/4">
                 <div className="rounded-lg bg-teal-500 p-4">
                     <div className="mb-2 flex items-center justify-between">
                         <h3 className="text-lg font-semibold">Done ({doneTasks.length})</h3>
-                        <button aria-label="Sort Tasks" onClick={handleSort}>
+                        <button
+                            aria-label="Sort Tasks"
+                            onClick={handleSortToggle}
+                            className="flex items-center gap-1 rounded-md bg-gray-700 px-2 py-1 text-white"
+                        >
                             {/* The icon changes based on the sort order */}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +43,7 @@ export default function Done({doneTasks, onEdit, onDelete }) {
                     </div>
 
                     <div>
-                        {sortedDoneTasks.map((task) => (
+                        {doneTasks.map((task) => (
                             <div key={task.id} className="mb-4 rounded-lg bg-gray-800 p-4">
                                 <div className="flex justify-between">
                                     <h4 className="mb-2 font-semibold text-teal-500">

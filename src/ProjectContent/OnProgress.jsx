@@ -1,28 +1,13 @@
 import React, { useState } from 'react';
 
-export default function OnProgress({ onProgressTasks, onEdit, onDelete }) {
-  const [sortOrder, setSortOrder] = useState(''); 
-
-  // Toggle sorting order between 'oldestToNewest' and 'newestToOldest'
-  const handleSort = () => {
-    if (sortOrder === 'oldestToNewest') {
-      setSortOrder('newestToOldest');
-    } else {
-      setSortOrder('oldestToNewest');
-    }
-  };
-
-  const sortedOnProgress = [...onProgressTasks].sort((a, b) => {
-    const dateA = new Date(a.dueDate);
-    const dateB = new Date(b.dueDate);
-
-    if (sortOrder === 'oldestToNewest') {
-      return dateA - dateB; // Sort from oldest to newest
-    } else if (sortOrder === 'newestToOldest') {
-      return dateB - dateA; // Sort from newest to oldest
-    }
-    return 0; // No sorting if no order is selected
-  });
+export default function OnProgress({ onProgressTasks, onEdit, onDelete, onSort}) {
+  const [sortOrder, setSortOrder] = useState('newestToOldest'); // Local state for sorting
+  
+    const handleSortToggle = () => {
+      const newOrder = sortOrder === 'newestToOldest' ? 'oldestToNewest' : 'newestToOldest';
+      setSortOrder(newOrder); // Update local state
+      onSort(newOrder); // Trigger parent sorting
+    };
 
   return (
     <>
@@ -30,7 +15,11 @@ export default function OnProgress({ onProgressTasks, onEdit, onDelete }) {
         <div className="rounded-lg bg-yellow-500 p-4">
           <div className="mb-2 flex items-center justify-between">
             <h3 className="text-lg font-semibold">On Progress ({onProgressTasks.length})</h3>
-            <button aria-label="Sort Tasks" onClick={handleSort}>
+            <button
+            aria-label="Sort Tasks"
+            onClick={handleSortToggle}
+            className="flex items-center gap-1 rounded-md bg-gray-700 px-2 py-1 text-white"
+          >
               {/* The icon changes based on the sort order */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +44,7 @@ export default function OnProgress({ onProgressTasks, onEdit, onDelete }) {
           </div>
 
           <div>
-            {sortedOnProgress.map((task) => (
+            {onProgressTasks.map((task) => (
               <div key={task.id} className="mb-4 rounded-lg bg-gray-800 p-4">
                 <div className="flex justify-between">
                   <h4 className="mb-2 flex-1 font-semibold text-yellow-500">

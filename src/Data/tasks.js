@@ -20,6 +20,12 @@ const tasksData = {
         description: "Prepare proctor for client meeting",
         dueDate: '2025-01-25',
       },
+      {
+        id: crypto.randomUUID(),
+        title: "Task-2",
+        description: "Prepare proctor for react",
+        dueDate: '2025-02-25',
+      },
     ],
     doneTasks: [
       {
@@ -28,6 +34,7 @@ const tasksData = {
         description: "Make Promotional Ads for Instagram fasto's",
         dueDate: '2025-01-25',
       },
+      
     ],
     revisedTasks: [
       {
@@ -35,6 +42,12 @@ const tasksData = {
         title: "Content Writer",
         description: "Make Promotional Ads for Instagram fasto's",
         dueDate: '2025-01-25',
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "New Revised task",
+        description: "Prepare proctor for client meeting",
+        dueDate: '2025-02-25',
       },
     ],
   };

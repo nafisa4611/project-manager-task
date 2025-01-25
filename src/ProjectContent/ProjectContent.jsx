@@ -60,6 +60,21 @@ export default function ProjectContent() {
     setTasks(updatedTasks);
   };
 
+   // Sort tasks for a specific category
+   const handleSortTasks = (category, sortOrder) => {
+    const sortedTasks = [...tasks[category]].sort((a, b) => {
+      const dateA = new Date(a.dueDate);
+      const dateB = new Date(b.dueDate);
+      return sortOrder === 'newestToOldest' ? dateB - dateA : dateA - dateB;
+    });
+
+    setTasks({
+      ...tasks,
+      [category]: sortedTasks,
+    });
+  };
+
+
 
   return (
     <>
@@ -109,21 +124,25 @@ export default function ProjectContent() {
             todos={tasks.todos}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onSort={(sortOrder) => handleSortTasks('todos', sortOrder)}
           />
           <OnProgress
             onProgressTasks={tasks.onProgressTasks}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onSort={(sortOrder) => handleSortTasks('onProgressTasks', sortOrder)}
           />
           <Done
             doneTasks={tasks.doneTasks}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onSort={(sortOrder) => handleSortTasks('doneTasks', sortOrder)}
           />
           <Revised
             revisedTasks={tasks.revisedTasks}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onSort={(sortOrder) => handleSortTasks('revisedTasks', sortOrder)}
           />
         </div>
       </div>
